@@ -28,75 +28,69 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
     EditText ed1, ed2, ed3, ed4;
     AppCompatButton b1,b2;
-    String apiurl= "https://friendsapi-re5a.onrender.com/adddata";
+
+    String apiUrl = "https://friendsapi-re5a.onrender.com/adddata";
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        b1= (AppCompatButton) findViewById(R.id.sub);
-        b1= (AppCompatButton) findViewById(R.id.vfriend);
-        ed1= (EditText) findViewById(R.id.uname);
-        ed2= (EditText) findViewById(R.id.fname);
-        ed3= (EditText) findViewById(R.id.nname);
-        ed4= (EditText) findViewById(R.id.desc);
+        ed1 = (EditText) findViewById(R.id.name);
+        ed2 = (EditText) findViewById(R.id.fname);
+        ed3 = (EditText) findViewById(R.id.nickname);
+        ed4 = (EditText) findViewById(R.id.description);
+        b1 = (AppCompatButton) findViewById(R.id.add);
+        b2=  (AppCompatButton) findViewById(R.id.view);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s1="",s2="",s3="",s4="";;
-                try{
-                    s1 = ed1.getText().toString();
-                    s2 = ed2.getText().toString();
-                    s3 = ed3.getText().toString();
-                    s4 = ed4.getText().toString();
-                    if(s1.equals("")||s2.equals("")||s3.equals("")||s4.equals("")){
-                        Toast.makeText(MainActivity.this, "please fill all the fields", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        //Toast.makeText(MainActivity.this, s1+" "+s2+" "+s3+" "+s4, Toast.LENGTH_SHORT).show();
-                        JSONObject friend = new JSONObject();
-                        try {
-                            friend.put("name",s1);
-                            friend.put("friendName",s2);
-                            friend.put("friendNickName",s3);
-                            friend.put("DescribeYourFriend",s4);
+                String getName = ed1.getText().toString();
+                String getFName = ed2.getText().toString();
+                String getNickname = ed3.getText().toString();
+                String getDes = ed4.getText().toString();
 
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        JsonObjectRequest request = new JsonObjectRequest(
-                                Request.Method.POST,
-                                apiurl,
-                                friend,
-                                new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        Toast.makeText(getApplicationContext(), "added successfully", Toast.LENGTH_SHORT).show();
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                        );
-                        //request queue
-                        RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-                        requestQueue.add(request);
-
-                    }
-                }catch (Exception e){
-                    Toast.makeText(MainActivity.this, "something went wrong", Toast.LENGTH_SHORT).show();
+                JSONObject friend = new JSONObject();
+                try {
+                    //reading values in JSON format
+                    friend.put("name", getName);
+                    friend.put("friendName", getFName);
+                    friend.put("friendNickName", getNickname);
+                    friend.put("DescribeYourFriend", getDes);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
+                //JSON object request creation
+                JsonObjectRequest jasonObjectRequest = new JsonObjectRequest(
+                        Request.Method.POST,
+                        apiUrl,
+                        friend,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                ed1.setText("");
+                                ed2.setText("");
+                                ed3.setText("");
+                                ed4.setText("");
+                                Toast.makeText(getApplicationContext(), "ADDED SUCCESFULLY", Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                requestQueue.add(jasonObjectRequest);
             }
         });
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),ViewFriends.class);
+                Intent i= new Intent(getApplicationContext(),ViewFriends.class);
                 startActivity(i);
             }
         });
