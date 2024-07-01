@@ -1,7 +1,9 @@
 package com.example.friendsapp;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.CharacterPickerDialog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,7 +27,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     EditText ed1, ed2, ed3, ed4;
-    AppCompatButton b1;
+    AppCompatButton b1,b2;
     String apiurl= "https://friendsapi-re5a.onrender.com/adddata";
     @SuppressLint("MissingInflatedId")
     @Override
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         b1= (AppCompatButton) findViewById(R.id.sub);
+        b1= (AppCompatButton) findViewById(R.id.vfriend);
         ed1= (EditText) findViewById(R.id.uname);
         ed2= (EditText) findViewById(R.id.fname);
         ed3= (EditText) findViewById(R.id.nname);
@@ -88,6 +91,13 @@ public class MainActivity extends AppCompatActivity {
                 }catch (Exception e){
                     Toast.makeText(MainActivity.this, "something went wrong", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(),ViewFriends.class);
+                startActivity(i);
             }
         });
     }
